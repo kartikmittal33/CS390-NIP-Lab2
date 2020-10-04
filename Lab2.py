@@ -14,12 +14,12 @@ tf.random.set_seed(1618)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # ALGORITHM = "guesser"
-ALGORITHM = "tf_net"
-# ALGORITHM = "tf_conv"
+# ALGORITHM = "tf_net"
+ALGORITHM = "tf_conv"
 
-DATASET = "mnist_d"
+# DATASET = "mnist_d"
 # DATASET = "mnist_f"
-# DATASET = "cifar_10"
+DATASET = "cifar_10"
 # DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
 
@@ -36,11 +36,20 @@ elif DATASET == "mnist_f":
     IZ = 1
     IS = 784
 elif DATASET == "cifar_10":
-    pass  # TODO: Add this case.
+    NUM_CLASSES = 10
+    IH = 32
+    IW = 32
+    IZ = 3
 elif DATASET == "cifar_100_f":
-    pass  # TODO: Add this case.
+    NUM_CLASSES = 100
+    IH = 32
+    IW = 32
+    IZ = 3
 elif DATASET == "cifar_100_c":
-    pass  # TODO: Add this case.
+    NUM_CLASSES = 20
+    IH = 32
+    IW = 32
+    IZ = 3
 
 NEURONS = 512
 
@@ -135,8 +144,19 @@ def buildTFNeuralNet(x, y, eps=6):
 
 
 def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
-    pass  # TODO: Implement a CNN here. dropout option is required.
-    return None
+    # TODO: Implement a CNN here. dropout option is required.
+    # can use this for dropout model.add(SpatialDropout2D(0.5))
+    model = tf.keras.models.Sequential(
+        [tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=(IH, IW, IZ)),
+         tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
+         tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
+         tf.keras.layers.SpatialDropout2D(dropRate),
+         tf.keras.layers.Flatten(),
+         tf.keras.layers.Dense(NEURONS, activation=tf.nn.sigmoid),
+         tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.sigmoid)])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.fit(x, y, epochs=5)
+    return model
 
 
 # =========================<Pipeline Functions>==================================
@@ -146,14 +166,17 @@ def getRawData():
         mnist = tf.keras.datasets.mnist
         (xTrain, yTrain), (xTest, yTest) = mnist.load_data()
     elif DATASET == "mnist_f":
-        mnist = tf.keras.datasets.fashion_mnist
-        (xTrain, yTrain), (xTest, yTest) = mnist.load_data()
+        mnist_f = tf.keras.datasets.fashion_mnist
+        (xTrain, yTrain), (xTest, yTest) = mnist_f.load_data()
     elif DATASET == "cifar_10":
-        pass  # TODO: Add this case.
+        cifar10 = tf.keras.datasets.cifar10
+        (xTrain, yTrain), (xTest, yTest) = cifar10.load_data()
     elif DATASET == "cifar_100_f":
-        pass  # TODO: Add this case.
+        cifar100_f = tf.keras.datasets.cifar100
+        (xTrain, yTrain), (xTest, yTest) = cifar100_f.load_data(label_mode="fine")
     elif DATASET == "cifar_100_c":
-        pass  # TODO: Add this case.
+        cifar100_c = tf.keras.datasets.cifar100
+        (xTrain, yTrain), (xTest, yTest) = cifar100_c.load_data(label_mode="coarse")
     else:
         raise ValueError("Dataset not recognized.")
     print("Dataset: %s" % DATASET)
