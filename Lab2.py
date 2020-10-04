@@ -146,20 +146,20 @@ def buildTFNeuralNet(x, y, eps=6):
 def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
     # TODO: Implement a CNN here. dropout option is required.
     model = tf.keras.models.Sequential(
-        [tf.keras.layers.Conv2D(96, kernel_size=(3, 3), activation=tf.nn.elu,
+        [tf.keras.layers.Conv2D(102, kernel_size=(3, 3), activation=tf.nn.elu,
                                 input_shape=(IH, IW, IZ)),
-         tf.keras.layers.Conv2D(96, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
+         tf.keras.layers.Conv2D(102, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
          tf.keras.layers.Dropout(0.2),
-         tf.keras.layers.Conv2D(192, kernel_size=(3, 3), activation=tf.nn.elu),
-         tf.keras.layers.Conv2D(192, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
-         tf.keras.layers.Dropout(0.5),
+         tf.keras.layers.Conv2D(204, kernel_size=(3, 3), activation=tf.nn.elu),
+         tf.keras.layers.Conv2D(204, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
+         tf.keras.layers.Dropout(0.3),
          tf.keras.layers.Flatten(),
          tf.keras.layers.BatchNormalization(),
-         tf.keras.layers.Dense(NEURONS, activation=tf.nn.elu),
+         tf.keras.layers.Dense(NEURONS, activation=tf.nn.relu),
          tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
     model.compile(optimizer='adam', loss='categorical_crossentropy',
                   metrics=['accuracy'])
-    model.fit(x, y, epochs=eps, validation_split=0.1, batch_size=256)
+    model.fit(x, y, epochs=eps, validation_split=0.3, batch_size=512)
 
     return model
 
