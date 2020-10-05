@@ -150,6 +150,7 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
                                 input_shape=(IH, IW, IZ)),
          tf.keras.layers.Conv2D(102, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
          tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
+         tf.keras.layers.Dropout(dropRate),
          tf.keras.layers.Conv2D(204, kernel_size=(3, 3), activation=tf.nn.elu),
          tf.keras.layers.Conv2D(204, kernel_size=(3, 3), activation=tf.nn.elu, strides=2),
          tf.keras.layers.Dropout(dropRate),
@@ -159,7 +160,7 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
          tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
     model.compile(optimizer='adam', loss='categorical_crossentropy',
                   metrics=['accuracy'])
-    model.fit(x, y, epochs=eps, validation_split=0.2, batch_size=256)
+    model.fit(x, y, epochs=eps, validation_split=0.1, batch_size=128)
 
     return model
 
