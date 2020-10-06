@@ -42,16 +42,19 @@ elif DATASET == "cifar_10":
     IH = 32
     IW = 32
     IZ = 3
+    IS = 3072
 elif DATASET == "cifar_100_f":
     NUM_CLASSES = 100
     IH = 32
     IW = 32
     IZ = 3
+    IS = 3072
 elif DATASET == "cifar_100_c":
     NUM_CLASSES = 20
     IH = 32
     IW = 32
     IZ = 3
+    IS = 3072
 
 NEURONS = 512
 
@@ -129,7 +132,7 @@ class NeuralNetwork_2Layer():
         _, layer2 = self.__forward(xVals)
         ans = []
         for entry in layer2:
-            pred = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            pred = [0] * NUM_CLASSES
             index = entry.argmax()
             pred[index] = 1
             ans.append(pred)
@@ -176,7 +179,6 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
         model.compile(optimizer='adam', loss='categorical_crossentropy',
                     metrics=['accuracy'])
         model.fit(x, y, epochs=10, validation_split=0.1, batch_size=256)
-
     return model
 
 
@@ -201,10 +203,6 @@ def getRawData():
     else:
         raise ValueError("Dataset not recognized.")
     print("Dataset: %s" % DATASET)
-
-    # xTrain = xTrain[:1000]
-    # yTrain = yTrain[:1000]
-
     print("Shape of xTrain dataset: %s." % str(xTrain.shape))
     print("Shape of yTrain dataset: %s." % str(yTrain.shape))
     print("Shape of xTest dataset: %s." % str(xTest.shape))
