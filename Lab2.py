@@ -18,12 +18,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # ALGORITHM = "tf_net"
 ALGORITHM = "tf_conv"
 
-# DATASET = "mnist_d"
+DATASET = "mnist_d"
 # DATASET = "mnist_f"
 # DATASET = "cifar_10"
 # DATASET = "cifar_100_f"
 # DATASET = "cifar_100_c"
-DATASET = sys.argv[1]
 
 if DATASET == "mnist_d":
     NUM_CLASSES = 10
@@ -155,29 +154,29 @@ def buildTFConvNet(x, y, eps=10, dropout=True, dropRate=0.2):
         model = tf.keras.models.Sequential(
             [tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid,
                                     input_shape=(IH, IW, IZ)),
-            tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid),
-            tf.keras.layers.MaxPool2D(pool_size=(3, 3)),
-            tf.keras.layers.Dropout(0.6),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(NEURONS, activation=tf.nn.sigmoid),
-            tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
+             tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid),
+             tf.keras.layers.MaxPool2D(pool_size=(3, 3)),
+             tf.keras.layers.Dropout(0.6),
+             tf.keras.layers.Flatten(),
+             tf.keras.layers.BatchNormalization(),
+             tf.keras.layers.Dense(NEURONS, activation=tf.nn.sigmoid),
+             tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
         model.compile(optimizer='adam', loss='categorical_crossentropy',
-                    metrics=['accuracy'])
+                      metrics=['accuracy'])
         model.fit(x, y, epochs=8, validation_split=0.1, batch_size=256)
     else:
         model = tf.keras.models.Sequential(
             [tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid,
                                     input_shape=(IH, IW, IZ)),
-            tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid),
-            tf.keras.layers.MaxPool2D(pool_size=(3, 3)),
-            tf.keras.layers.Dropout(0.5),
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(NEURONS, activation=tf.nn.sigmoid),
-            tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
+             tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation=tf.nn.sigmoid),
+             tf.keras.layers.MaxPool2D(pool_size=(3, 3)),
+             tf.keras.layers.Dropout(0.5),
+             tf.keras.layers.Flatten(),
+             tf.keras.layers.BatchNormalization(),
+             tf.keras.layers.Dense(NEURONS, activation=tf.nn.sigmoid),
+             tf.keras.layers.Dense(NUM_CLASSES, activation=tf.nn.softmax)])
         model.compile(optimizer='adam', loss='categorical_crossentropy',
-                    metrics=['accuracy'])
+                      metrics=['accuracy'])
         model.fit(x, y, epochs=10, validation_split=0.1, batch_size=256)
     return model
 
@@ -287,4 +286,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
